@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script>
+		// load observe and webcomponents polyfills (only if needed)
+		var loadScript = function(src) {
+			var script = document.createElement('script');
+			script.src = src;
+			document.head.appendChild(script);
+		}
+		if(!Object.observe) loadScript('/bower_components/object.observe/dist/object-observe.js');
+		if(!Array.observe) loadScript('/bower_components/array.observe/array-observe.js');
+		if(!HTMLElement.prototype.createShadowRoot) loadScript('/bower_components/webcomponents.js/webcomponents.min.js');
+	</script>
+	<link rel="import" href="/bower_components/mysimpleapp/mysimpleapp.pack.html"></link>
+	<link rel="import" href="/bower_components/msa-navmenu/msa-navmenu.html"></link>
+	{{{partial.head}}}
+	<title>My Simple App</title>
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		#content {
+			padding: 10px;
+		}
+	</style>
+</head>
+<body>
+	<msa-navmenu></msa-navmenu>
+	<div id="content">
+		{{{partial.body}}}
+	</div>
+	<script>
+		var startApp = function() {
+			if(!window.App) return setTimeout(startApp, 10); // TODO: fix this dirty trick (in place because, window.load does not wait mySimpleApp.pack.html to be fully loaded)
+			// user
+			App.get("/user/islog", null, App.user);
+			// reload when user log out
+			//Observe(App.user, function(){ if(!this.name) location.reload(); });
+			// router
+			//App.initRouter(document.querySelector("#content"));
+		}
+		startApp();
+	</script>
+</body>
+</html>

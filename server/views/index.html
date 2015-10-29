@@ -11,6 +11,7 @@
 		}
 		if(!Object.observe) loadScript('/bower_components/object.observe/dist/object-observe.js');
 		if(!Array.observe) loadScript('/bower_components/array.observe/array-observe.js');
+		var eventToWait = (!HTMLElement.prototype.createShadowRoot) ? 'WebComponentsReady' : 'load';
 		if(!HTMLElement.prototype.createShadowRoot) loadScript('/bower_components/webcomponents.js/webcomponents.min.js');
 	</script>
 	<link rel="import" href="/bower_components/mysimpleapp/mysimpleapp.pack.html"></link>
@@ -33,16 +34,9 @@
 		{{{partial.body}}}
 	</div>
 	<script>
-		var startApp = function() {
-			if(!window.App) return setTimeout(startApp, 10); // TODO: fix this dirty trick (in place because, window.load does not wait mySimpleApp.pack.html to be fully loaded)
-			// user
+		window.addEventListener(eventToWait, function(e) {
 			App.get("/user/islog", null, App.user);
-			// reload when user log out
-			//Observe(App.user, function(){ if(!this.name) location.reload(); });
-			// router
-			//App.initRouter(document.querySelector("#content"));
-		}
-		startApp();
+		});
 	</script>
 </body>
 </html>

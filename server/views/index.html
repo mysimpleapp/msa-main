@@ -12,27 +12,41 @@
 		if(!Object.observe) loadScript('/bower_components/object.observe/dist/object-observe.js');
 		if(!Array.observe) loadScript('/bower_components/array.observe/array-observe.js');
 		var eventToWait = (!HTMLElement.prototype.createShadowRoot) ? 'WebComponentsReady' : 'load';
-		if(!HTMLElement.prototype.createShadowRoot) loadScript('/bower_components/webcomponents.js/webcomponents.min.js');
+		if(!HTMLElement.prototype.createShadowRoot) loadScript('/bower_components/webcomponentsjs/webcomponents.min.js');
 	</script>
 	<link rel="import" href="/bower_components/mysimpleapp/mysimpleapp.pack.html"></link>
-	<link rel="import" href="/bower_components/msa-navmenu/msa-navmenu.html"></link>
-	{{{partial.head}}}
+	{{{headerPartial.head}}}
+	{{{contentPartial.head}}}
 	<title>My Simple App</title>
 	<style>
-		body {
-			padding: 0;
-			margin: 0;
+		html, body, #wrapper {
+			height:100%;
+			width:100%;
+		}
+		html, body, #wrapper, #wrapper tr, #wrapper td {
+			padding:0;
+			margin:0;
+			border-spacing: 0;
+			border: 0;
+			vertical-align: top;
+		}
+		#header_row {
+			height: 10px;
+		}
+		#wrapper td#content_cell {
+			padding: 10px;
+			height: 100%;
 		}
 		#content {
-			padding: 10px;
+			height: 100%;
 		}
 	</style>
 </head>
 <body>
-	<msa-navmenu></msa-navmenu>
-	<div id="content">
-		{{{partial.body}}}
-	</div>
+	<table id="wrapper">
+		<tr id="header_row"><td>{{{headerPartial.body}}}</td></tr>
+		<tr><td id="content_cell"><div id="content">{{{contentPartial.body}}}</div></td></tr>
+	</table>
 	<script>
 		window.addEventListener(eventToWait, function(e) {
 			App.get("/user/islog", null, App.user);

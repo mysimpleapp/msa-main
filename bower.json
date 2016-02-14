@@ -10,9 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "mysimpleapp": "*",
-    "msa-db": "*",
-    "msa-user": "*",
-    "msa-editor": "*"
+    "msa-navmenu": "*",
+    "msa-page": "*"
   },
   "routes": {
     "": "server/index.js"

@@ -15,6 +15,7 @@
 		if(!HTMLElement.prototype.createShadowRoot) loadScript('/bower_components/webcomponentsjs/webcomponents.min.js');
 	</script>
 	<link rel="import" href="/bower_components/mysimpleapp/mysimpleapp.pack.html"></link>
+	{{{userPartial.head}}}
 	{{{headerPartial.head}}}
 	{{{contentPartial.head}}}
 	<title>My Simple App</title>
@@ -23,7 +24,7 @@
 			height:100%;
 			width:100%;
 		}
-		html, body, #wrapper, #wrapper tr, #wrapper td {
+		html, body, #wrapper, #wrapper > tr, #wrapper > tr > td {
 			padding:0;
 			margin:0;
 			border-spacing: 0;

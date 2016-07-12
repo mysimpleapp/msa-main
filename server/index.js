@@ -27,6 +27,7 @@ mainApp.setDefaultRoute = function(next) {
 		next && next()
 	})
 }
+mainApp.setDefaultRoute()
 
 mainApp.get("/", function(req, res, next) {
 	res.redirect(mainApp.defaultRoute)
@@ -57,12 +58,12 @@ mainApp.get('*', function(req, res, next) {
 	var contentPartial = res.partial
 	delete res.partial
 	// get partial from navmenu
-	navmenuApp.getAsPartial(req, res, function(){
+	navmenuApp.getPartial(req, res, function(){
 		if(!res.partial) return next();
 		var headerPartial = res.partial
 		delete res.partial
 		// get partial form user
-		userApp.getAsPartial(req, res, function(){
+		userApp.getPartial(req, res, function(){
 			if(!res.partial) return next();
 			var userPartial = res.partial
 			delete res.partial

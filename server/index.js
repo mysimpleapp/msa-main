@@ -9,14 +9,27 @@ var mustache = require('mustache');
 var template = fs.readFileSync(__dirname+'/views/index.html', "utf8");
 mustache.parse(template);
 
-mainApp.get("*", function(req, res, next) {
+/*mainApp.get("*", function(req, res, next) {
 	next();
-});
+});*/
 
 // default route
+mainApp.setDefaultRoute = function(next) {
+	userApp.isFirstRegisterDone(function(err, done) {
+		if(err) return next(err)
+		if(done) mainApp.defaultRoute = "/page/home"
+		else {
+			mainApp.defaultRoute = "/user/firstregister"
+			userApp.onFirstRegister = function(next) {
+				mainApp.setDefaultRoute(next)
+			}
+		}
+		next && next()
+	})
+}
+
 mainApp.get("/", function(req, res, next) {
-	req.url = "/page/home";
-	next();
+	res.redirect(mainApp.defaultRoute)
 });
 
 // import some middlewares

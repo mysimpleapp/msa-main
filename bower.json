@@ -11,9 +11,7 @@
   "dependencies": {
     "mysimpleapp": "*",
     "msa-navmenu": "*",
+    "msa-user": "*",
     "msa-page": "*"
-  },
-  "routes": {
-    "": "server/index.js"
   }
 }

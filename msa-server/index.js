@@ -1,7 +1,7 @@
 var mainApp = module.exports = App.subApp()
 
-var navmenuApp = require("../../msa-navmenu/server")
-var userApp = require("../../msa-user/server")
+var navmenuApp = require("../../msa-navmenu/msa-server")
+var userApp = require("../../msa-user/msa-server")
 
 // template
 var fs = require('fs');
@@ -55,17 +55,17 @@ partialApp.use(App.subAppsRouter)
 mainApp.get('*', function(req, res, next) {
 	// check if a sub app have replied a partial
 	if(!res.partial) return next();
-	var contentPartial = res.partial
+	var contentPartial = App.solveHtmlExpr(res.partial)
 	delete res.partial
 	// get partial from navmenu
 	navmenuApp.getPartial(req, res, function(){
 		if(!res.partial) return next();
-		var headerPartial = res.partial
+		var headerPartial = App.solveHtmlExpr(res.partial)
 		delete res.partial
 		// get partial form user
 		userApp.getPartial(req, res, function(){
 			if(!res.partial) return next();
-			var userPartial = res.partial
+			var userPartial = App.solveHtmlExpr(res.partial)
 			delete res.partial
 			// send content
 			res.setHeader('content-type', 'text/html')

@@ -1,13 +1,13 @@
-var mainApp = module.exports = App.subApp()
+var mainApp = module.exports = Msa.subApp()
 
 var navmenuApp = require("../../msa-navmenu/msa-server")
 var userApp = require("../../msa-user/msa-server")
 
 // template
-var fs = require('fs');
-var mustache = require('mustache');
-var template = fs.readFileSync(__dirname+'/views/index.html', "utf8");
-mustache.parse(template);
+var fs = require('fs')
+var mustache = require('mustache')
+var template = fs.readFileSync(__dirname+'/views/index.html', "utf8")
+mustache.parse(template)
 
 /*mainApp.get("*", function(req, res, next) {
 	next();
@@ -31,14 +31,14 @@ mainApp.setDefaultRoute()
 
 mainApp.get("/", function(req, res, next) {
 	res.redirect(mainApp.defaultRoute)
-});
+})
 
 // import some middlewares
-App.use(require("body-parser").json());
+Msa.app.use(require("body-parser").json())
 
 // partialApp
-var partialApp = App.subApp();
-mainApp.use("/partial", partialApp);
+var partialApp = Msa.subApp()
+mainApp.use("/partial", partialApp)
 
 // subApp routing
 /*for(var routeName in App.routes) {
@@ -48,24 +48,24 @@ mainApp.use("/partial", partialApp);
 		partialApp.use("/"+routeName, subApp);
 	}
 }*/
-mainApp.use(App.subAppsRouter)
-partialApp.use(App.subAppsRouter)
+mainApp.use(Msa.subAppsRouter)
+partialApp.use(Msa.subAppsRouter)
 
 // render view with partial content
 mainApp.get('*', function(req, res, next) {
 	// check if a sub app have replied a partial
-	if(!res.partial) return next();
-	var contentPartial = App.solveHtmlExpr(res.partial)
+	if(!res.partial) return next()
+	var contentPartial = Msa.solveHtmlExpr(res.partial)
 	delete res.partial
 	// get partial from navmenu
 	navmenuApp.getPartial(req, res, function(){
 		if(!res.partial) return next();
-		var headerPartial = App.solveHtmlExpr(res.partial)
+		var headerPartial = Msa.solveHtmlExpr(res.partial)
 		delete res.partial
 		// get partial form user
 		userApp.getPartial(req, res, function(){
 			if(!res.partial) return next();
-			var userPartial = App.solveHtmlExpr(res.partial)
+			var userPartial = Msa.solveHtmlExpr(res.partial)
 			delete res.partial
 			// send content
 			res.setHeader('content-type', 'text/html')
@@ -77,9 +77,9 @@ mainApp.get('*', function(req, res, next) {
 
 // render partial as ajax
 partialApp.get("*", function(req, res, next) {
-	if(!res.partial) return next();
+	if(!res.partial) return next()
 	res.json(res.partial)
 })
 
 // static routing
-mainApp.use(App.express.static(App.dirname));
+mainApp.use(Msa.express.static(Msa.dirname))

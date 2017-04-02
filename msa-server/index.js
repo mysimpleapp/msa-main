@@ -27,7 +27,9 @@ mainApp.setDefaultRoute = function(next) {
 		next && next()
 	})
 }
-mainApp.setDefaultRoute()
+mainApp.setDefaultRoute(function(err) {
+	if(err) console.log(err)
+})
 
 mainApp.get("/", function(req, res, next) {
 	res.redirect(mainApp.defaultRoute)

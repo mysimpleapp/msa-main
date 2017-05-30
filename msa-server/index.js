@@ -1,7 +1,8 @@
 var mainApp = module.exports = Msa.subApp()
 
 var navmenuApp = require("../../msa-navmenu/msa-server")
-var userApp = require("../../msa-user/msa-server")
+var msaUser = require("../../msa-user/msa-server"),
+	userApp = msaUser.subApp
 
 // template
 var fs = require('fs')
@@ -15,12 +16,12 @@ mustache.parse(template)
 
 // default route
 mainApp.setDefaultRoute = function(next) {
-	userApp.isFirstRegisterDone(function(err, done) {
+	msaUser.isFirstRegisterDone(function(err, done) {
 		if(err) return next(err)
 		if(done) mainApp.defaultRoute = "/page/home"
 		else {
 			mainApp.defaultRoute = "/user/firstregister"
-			userApp.onFirstRegister = function(next) {
+			msaUser.onFirstRegister = function(next) {
 				mainApp.setDefaultRoute(next)
 			}
 		}
@@ -61,12 +62,12 @@ mainApp.get('*', function(req, res, next) {
 	delete res.partial
 	// get partial from navmenu
 	navmenuApp.getPartial(req, res, function(){
-		if(!res.partial) return next();
+		if(!res.partial) return next()
 		var headerPartial = Msa.solveHtmlExpr(res.partial)
 		delete res.partial
 		// get partial form user
 		userApp.getPartial(req, res, function(){
-			if(!res.partial) return next();
+			if(!res.partial) return next()
 			var userPartial = Msa.solveHtmlExpr(res.partial)
 			delete res.partial
 			// send content

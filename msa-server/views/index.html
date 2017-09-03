@@ -18,13 +18,19 @@
 	<title>My Simple App</title>
 	<style>
 		html, body {
-			padding:0;
-			margin:0;
-			height:100%;
+			padding: 0;
+			margin: 0;
+		}
+		html {
+			height: 100%;
 		}
 		body {
+			min-height: 100%;
 			display: flex;
 			flex-direction: column;
+		}
+		#content > * {
+			flex: 1;
 		}
 	</style>
 	<link rel="import" href="/bower_components/mysimpleapp/mysimpleapp.html"></link>
@@ -33,7 +39,7 @@
 	{{{contentPartial.head}}}
 </head>
 <body>
-	<div style="display:flex;">{{{headerPartial.body}}}</div>
-	<div style="display:flex; flex:1;">{{{contentPartial.body}}}</div>
+	<div id='header' style="display:flex;">{{{headerPartial.body}}}</div>
+	<div id='content' style="display:flex; flex:1;">{{{contentPartial.body}}}</div>
 </body>
 </html>
